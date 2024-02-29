@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "526261799450",
+    "project_id": "chatapp-c60a2",
+    "storage_bucket": "chatapp-c60a2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526261799450:android:d60787cbe6dc99eace9fa3",
+        "android_client_info": {
+          "package_name": "com.azteca.chatapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwMdjw3dxkcwZGb5UJ6IvhlN2Trgd1C_k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">ChatApp</string>
+
+
+    <!--    all-->
+    <string name="all_descr_icon">icono</string>
+
+    <!--    login-->
+    <string name="login_title">Ingresa tu numero de telefono</string>
+    <string name="login_number">Numero</string>
+    <string name="login_btn_send">Enviar OTP</string>
+    <string name="login_enter_opt">Ingresa OPT enviado a tu numero</string>
+    <string name="login_tv1">1</string>
+    <string name="login_tv2">2</string>
+    <string name="login_tv3">3</string>
+    <string name="login_next">Siguiente</string>
+    <string name="login_opt">OPT</string>
+    <string name="login_resend_code">Renviar codigo</string>
+    <string name="login_enter_username">Ingersa un username</string>
+    <string name="login_username">Username</string>
+    <string name="login_sig_int">Ingersar</string>
+    <string name="login_err_number">Numero no valido</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

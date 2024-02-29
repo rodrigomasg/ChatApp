@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_login"
+    app:startDestination="@id/login1Fragment">
+
+    <fragment
+        android:id="@+id/login1Fragment"
+        android:name="com.azteca.chatapp.ui.fragment.Login1Fragment"
+        android:label="fragment_login1"
+        tools:layout="@layout/fragment_login1" >
+        <action
+            android:id="@+id/action_login1Fragment_to_login2Fragment"
+            app:destination="@id/login2Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/login2Fragment"
+        android:name="com.azteca.chatapp.ui.fragment.Login2Fragment"
+        android:label="fragment_login2"
+        tools:layout="@layout/fragment_login2" >
+        <action
+            android:id="@+id/action_login2Fragment_to_login3Fragment"
+            app:destination="@id/login3Fragment" />
+        <argument
+            android:name="number"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/login3Fragment"
+        android:name="com.azteca.chatapp.ui.fragment.Login3Fragment"
+        android:label="fragment_login3"
+        tools:layout="@layout/fragment_login3" />
+</navigation>

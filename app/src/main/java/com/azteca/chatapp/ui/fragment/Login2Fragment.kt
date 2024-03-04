@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -32,7 +33,7 @@ class Login2Fragment : Fragment() {
     private lateinit var txtNumber: String
     private var timerOut = 60L
     private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
-    private lateinit var verifyId: String
+    private var verifyId: String? = null
 
     private val callBackAuth = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
@@ -44,6 +45,7 @@ class Login2Fragment : Fragment() {
             //     detect the incoming verification SMS and perform verification without
             //     user action.
             Log.d(TAG, "onVerificationCompleted:$credential")
+            binding.login2Pg.isVisible = false
             signInWithPhoneAuthCredential(credential)
         }
 
@@ -51,7 +53,7 @@ class Login2Fragment : Fragment() {
             // This callback is invoked in an invalid request for verification is made,
             // for instance if the the phone number format is not valid.
             Log.w(TAG, "onVerificationFailed", e)
-
+            binding.login2Pg.isVisible = false
             when (e) {
                 is FirebaseAuthInvalidCredentialsException -> {
                     // Invalid request
@@ -79,7 +81,7 @@ class Login2Fragment : Fragment() {
             // now need to ask the user to enter the code and then construct a credential
             // by combining the code with a verification ID.
             Log.d(TAG, "onCodeSent:$verificationId")
-            binding.loginBtnSend.isEnabled = false
+            binding.login2Pg.isVisible = false
 
             // Save verification ID and resending token so we can use them later
             verifyId = verificationId
@@ -109,16 +111,21 @@ class Login2Fragment : Fragment() {
     }
 
     private fun initComponents() {
+        binding.login2Pg.isVisible = true
         sendCode()
         startResendCodeTimer()
     }
 
     private fun listeners() {
         binding.loginBtnSend.setOnClickListener {
-            val cred = PhoneAuthProvider.getCredential(
-                verifyId, binding.loginEtNumber.text.toString()
-            )
-            signInWithPhoneAuthCredential(cred)
+            if (!binding.loginEtNumber.text.isNullOrEmpty()
+                && verifyId != null
+            ) {
+                val cred = PhoneAuthProvider.getCredential(
+                    verifyId!!, binding.loginEtNumber.text.toString()
+                )
+                signInWithPhoneAuthCredential(cred)
+            }
         }
         binding.loginTvResend.setOnClickListener {
             sendCode()
@@ -152,7 +159,7 @@ class Login2Fragment : Fragment() {
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
             .setActivity(requireActivity()) // Activity (for callback binding)
             .setCallbacks(callBackAuth) // OnVerificationStateChangedCallbacks
-            //.setForceResendingToken(forceResendingToken)
+//            .setForceResendingToken(forceResendingToken)
             .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
     }

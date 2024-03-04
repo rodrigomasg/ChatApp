@@ -10,10 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.azteca.chatapp.R
+import com.azteca.chatapp.common.Service.Companion.firebaseAuth
 import com.azteca.chatapp.databinding.FragmentLogin2Binding
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException
 import com.google.firebase.auth.PhoneAuthCredential
@@ -30,7 +30,6 @@ class Login2Fragment : Fragment() {
     private val binding get() = _binding!!
     private val args: Login2FragmentArgs by navArgs()
     private lateinit var txtNumber: String
-    private lateinit var firebaseAuth: FirebaseAuth
     private var timerOut = 60L
     private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
     private lateinit var verifyId: String
@@ -110,7 +109,6 @@ class Login2Fragment : Fragment() {
     }
 
     private fun initComponents() {
-        firebaseAuth = FirebaseAuth.getInstance()
         sendCode()
         startResendCodeTimer()
     }

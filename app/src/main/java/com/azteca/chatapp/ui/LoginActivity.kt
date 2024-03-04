@@ -1,10 +1,7 @@
-package com.azteca.chatapp
+package com.azteca.chatapp.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.azteca.chatapp.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {

@@ -1,9 +1,10 @@
-package com.azteca.chatapp
+package com.azteca.chatapp.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.azteca.chatapp.R
 
 class StartActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,5 +15,6 @@ class StartActivity : AppCompatActivity() {
 
 
         startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 }

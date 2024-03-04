@@ -16,10 +16,11 @@
     <string name="login_next">Siguiente</string>
     <string name="login_opt">OPT</string>
     <string name="login_resend_code">Renviar codigo</string>
-    <string name="login_enter_username">Ingersa un username</string>
+    <string name="login_enter_username">Ingresa un username</string>
     <string name="login_username">Username</string>
-    <string name="login_sig_int">Ingersar</string>
+    <string name="login_sig_int">Ingresar</string>
     <string name="login_err_number">Numero no valido</string>
+    <string name="login_username_input">Ingresa un username</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

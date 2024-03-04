@@ -92,7 +92,6 @@
         android:background="@drawable/style_input"
         android:elevation="4dp"
         android:hint="@string/login_username"
-        android:inputType="number"
         android:paddingHorizontal="10dp"
         android:paddingVertical="8dp"
         app:layout_constraintEnd_toEndOf="@id/guidelineV2"

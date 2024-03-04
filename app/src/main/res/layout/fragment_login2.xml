@@ -107,6 +107,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:background="@drawable/style_btn"
+        android:enabled="false"
         android:text="@string/login_next"
         app:layout_constraintEnd_toEndOf="@id/guidelineV2"
         app:layout_constraintStart_toStartOf="@id/guidelineV1"
@@ -117,8 +118,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:enabled="false"
         android:padding="8dp"
-        android:text="@string/login_enter_opt"
+        android:text="@string/login_resend_code"
         app:layout_constraintEnd_toEndOf="@id/guidelineV2"
         app:layout_constraintStart_toStartOf="@id/guidelineV1"
         app:layout_constraintTop_toBottomOf="@id/loginBtnSend" />

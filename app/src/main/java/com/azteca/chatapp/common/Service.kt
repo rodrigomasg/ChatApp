@@ -8,13 +8,15 @@ import com.google.firebase.ktx.Firebase
 class Service {
 
     companion object {
-
         private const val collectUser = "user"
+
+
         val firebaseAuth = FirebaseAuth.getInstance()
         val currentUid = Firebase.auth.uid
         val firestoreUsers =
             currentUid?.let {
                 FirebaseFirestore.getInstance().collection(collectUser).document(it)
             }
+        val isLogin = currentUid != null
     }
 }

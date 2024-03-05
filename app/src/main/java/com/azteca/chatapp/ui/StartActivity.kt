@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.azteca.chatapp.R
+import com.azteca.chatapp.common.Service.Companion.isLogin
 
 class StartActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,7 +15,12 @@ class StartActivity : AppCompatActivity() {
         screen.setKeepOnScreenCondition { false }
 
 
-        startActivity(Intent(this, LoginActivity::class.java))
-        finish()
+        if (isLogin) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        } else {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
     }
 }

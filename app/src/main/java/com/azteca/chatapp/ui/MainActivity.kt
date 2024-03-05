@@ -2,15 +2,13 @@ package com.azteca.chatapp.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.findNavController
 import com.azteca.chatapp.R
 import com.azteca.chatapp.databinding.ActivityMainBinding
 
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,11 +20,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initUI() {
-        val navHost =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHost.navController
-        binding.mainBottomMain.setupWithNavController(
-            (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
-        )
+        binding.mainIvSearch.setOnClickListener {
+            findNavController(R.id.nav_host_fragment).navigate(R.id.searchFragment)
+        }
+        binding.mainIvProfile.setOnClickListener {
+            findNavController(R.id.nav_host_fragment).navigate(R.id.profileFragment)
+        }
     }
 }

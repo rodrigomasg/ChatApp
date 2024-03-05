@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.azteca.chatapp.R
 import com.azteca.chatapp.databinding.FragmentChatsBinding
@@ -26,6 +24,16 @@ class ChatsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initListeners()
+    }
+
+    private fun initListeners() {
+        binding.mainIvSearch.setOnClickListener {
+            findNavController().navigate(R.id.searchFragment)
+        }
+        binding.mainIvProfile.setOnClickListener {
+            findNavController().navigate(R.id.profileFragment)
+        }
     }
 
 }

@@ -16,15 +16,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        initUI()
-    }
 
-    private fun initUI() {
-        binding.mainIvSearch.setOnClickListener {
-            findNavController(R.id.nav_host_fragment).navigate(R.id.searchFragment)
-        }
-        binding.mainIvProfile.setOnClickListener {
-            findNavController(R.id.nav_host_fragment).navigate(R.id.profileFragment)
-        }
     }
 }

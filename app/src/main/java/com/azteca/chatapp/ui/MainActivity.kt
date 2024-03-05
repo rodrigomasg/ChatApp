@@ -2,8 +2,6 @@ package com.azteca.chatapp.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import com.azteca.chatapp.R
 import com.azteca.chatapp.databinding.ActivityMainBinding
 
 
@@ -14,8 +12,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
 
     }
 }

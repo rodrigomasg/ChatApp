@@ -6,11 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.azteca.chatapp.R
 import com.azteca.chatapp.common.Service.Companion.firestoreUsers
-import com.azteca.chatapp.data.UserModel
+import com.azteca.chatapp.data.model.UserModel
 import com.azteca.chatapp.databinding.FragmentLogin3Binding
 import com.azteca.chatapp.ui.MainActivity
 import java.sql.Timestamp
@@ -57,6 +58,7 @@ class Login3Fragment : Fragment() {
         if (txtUsername.isNullOrEmpty()) {
             binding.loginEtNumber.error = getString(R.string.login_username_input)
         } else {
+            binding.login3Pg.isVisible = true
             val userModel = UserModel(
                 txtNumber,
                 txtUsername.toString(),
@@ -64,9 +66,11 @@ class Login3Fragment : Fragment() {
             )
             firestoreUsers?.set(userModel)?.addOnCompleteListener {
                 if (it.isSuccessful) {
-                    val main = Intent(requireContext(), MainActivity::class.java)
-                    startActivity(main)
+                    binding.login3Pg.isVisible = false
+                    requireActivity().finish()
+                    startActivity(Intent(requireContext(), MainActivity::class.java))
                 } else {
+                    binding.login3Pg.isVisible = false
                     Log.e(TAG, it.result.toString())
                 }
             }
@@ -74,10 +78,17 @@ class Login3Fragment : Fragment() {
     }
 
     private fun getUsername() {
+        binding.login3Pg.isVisible = true
         firestoreUsers?.get()?.addOnCompleteListener {
             if (it.isSuccessful) {
+                binding.login3Pg.isVisible = false
                 val user = it.result.toObject(UserModel::class.java)
-                binding.loginEtNumber.setText(user?.username ?: "")
+                Log.e(TAG, user?.username ?: "")
+                if (!user?.username.isNullOrEmpty()) {
+                    requireActivity().finish()
+                    startActivity(Intent(requireContext(), MainActivity::class.java))
+                    binding.loginEtNumber.setText(user?.username ?: "")
+                }
             }
         }
     }

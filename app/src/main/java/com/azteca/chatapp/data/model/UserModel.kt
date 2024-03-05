@@ -1,4 +1,4 @@
-package com.azteca.chatapp.data
+package com.azteca.chatapp.data.model
 
 import java.sql.Timestamp
 

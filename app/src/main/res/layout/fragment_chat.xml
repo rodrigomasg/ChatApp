@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/all_descr_icon"
             android:padding="8dp"
-            android:src="@drawable/person_menu"
+            android:src="@drawable/account_circle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/searchIvBack"
             app:layout_constraintTop_toTopOf="parent" />

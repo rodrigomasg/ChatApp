@@ -67,7 +67,11 @@ class SearchFragment : Fragment() {
     private fun toChat(userModelResponse: UserModelResponse) {
         if (userModelResponse.userId != null) {
             findNavController().navigate(
-                SearchFragmentDirections.actionSearchFragmentToChatFragment(userModelResponse.userId!!)
+                SearchFragmentDirections.actionSearchFragmentToChatFragment(
+                    userModelResponse.userId!!,
+                    userModelResponse.username,
+                    userModelResponse.phone
+                )
             )
         }
     }

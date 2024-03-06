@@ -35,6 +35,7 @@ class Login2Fragment : Fragment() {
     private var timerOut = 60L
     private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
     private var verifyId: String? = null
+    private var timer: Timer? = null
 
     private val callBackAuth = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
@@ -134,24 +135,27 @@ class Login2Fragment : Fragment() {
     }
 
     private fun startResendCodeTimer() {
-        val timer = Timer()
-        timer.schedule(object : TimerTask() {
-            @SuppressLint("SetTextI18n")
-            override fun run() {
-                timerOut--
-                requireActivity().runOnUiThread {
-                    binding.loginTvResend.isEnabled = false
-                    binding.loginTvResend.text = "${getText(R.string.login_resend_code)} $timerOut "
-                }
-                if (timerOut <= 0) {
-                    timerOut = 60L
-                    timer.cancel()
+        timer = Timer()
+        if (timer != null) {
+            timer!!.schedule(object : TimerTask() {
+                @SuppressLint("SetTextI18n")
+                override fun run() {
+                    timerOut--
                     requireActivity().runOnUiThread {
-                        binding.loginTvResend.isEnabled = true
+                        binding.loginTvResend.isEnabled = false
+                        binding.loginTvResend.text =
+                            "${getText(R.string.login_resend_code)} $timerOut "
+                    }
+                    if (timerOut <= 0) {
+                        timerOut = 60L
+                        timer!!.cancel()
+                        requireActivity().runOnUiThread {
+                            binding.loginTvResend.isEnabled = true
+                        }
                     }
                 }
-            }
-        }, 0, 1000)
+            }, 0, 1000)
+        }
     }
 
     private fun sendCode() {
@@ -178,5 +182,12 @@ class Login2Fragment : Fragment() {
                     .show()
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Detener y limpiar el timer cuando el Fragmento se detiene
+        timer?.cancel()
+        timer = null
     }
 }

@@ -56,20 +56,22 @@ class Login3Fragment : Fragment() {
         } else {
             Log.e(TAG, "se creara")
             binding.login3Pg.isVisible = true
-            val userModel = UserModel(
-                getCurrentUid(),
-                txtNumber,
-                txtUsername.toString(),
-                Timestamp(System.currentTimeMillis())
-            )
-            setInfUser(userModel).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    binding.login3Pg.isVisible = false
-                    requireActivity().finish()
-                    startActivity(Intent(requireContext(), MainActivity::class.java))
-                } else {
-                    binding.login3Pg.isVisible = false
-                    Log.e(TAG, it.result.toString())
+            if (!getCurrentUid().isNullOrEmpty()) {
+                val userModel = UserModel(
+                    getCurrentUid(),
+                    txtNumber,
+                    txtUsername.toString(),
+                    Timestamp(System.currentTimeMillis())
+                )
+                setInfUser(userModel).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        binding.login3Pg.isVisible = false
+                        requireActivity().finish()
+                        startActivity(Intent(requireContext(), MainActivity::class.java))
+                    } else {
+                        binding.login3Pg.isVisible = false
+                        Log.e(TAG, it.result.toString())
+                    }
                 }
             }
         }

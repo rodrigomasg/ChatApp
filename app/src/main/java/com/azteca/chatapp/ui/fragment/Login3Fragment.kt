@@ -63,7 +63,7 @@ class Login3Fragment : Fragment() {
                     txtUsername.toString(),
                     Timestamp(System.currentTimeMillis())
                 )
-                setInfUser(userModel).addOnCompleteListener {
+                setInfUser(getCurrentUid()!!, userModel).addOnCompleteListener {
                     if (it.isSuccessful) {
                         binding.login3Pg.isVisible = false
                         requireActivity().finish()

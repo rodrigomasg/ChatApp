@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.azteca.chatapp.common.Service.Companion.getChatroom
 import com.azteca.chatapp.common.Service.Companion.getChatroomId
+import com.azteca.chatapp.common.Service.Companion.getChatroomMsg
 import com.azteca.chatapp.common.Service.Companion.getCurrentUid
+import com.azteca.chatapp.data.model.ChatMsgModel
 import com.azteca.chatapp.data.model.ChatroomModel
 import com.azteca.chatapp.data.model.ChatroomModelResponse
 import com.azteca.chatapp.databinding.FragmentChatBinding
@@ -21,6 +23,7 @@ class ChatFragment : Fragment() {
     private val binding get() = _binding!!
     private val args: ChatFragmentArgs by navArgs()
     private var chatroomModelResponse: ChatroomModelResponse? = null
+    private var chatroomId: String? = null
     private var otherUserId: String? = null
     private var otherUsername: String? = null
     private var otherNumber: String? = null
@@ -56,21 +59,23 @@ class ChatFragment : Fragment() {
 
     private fun getChatRoomId() {
         if (getCurrentUid() != null && otherUserId != null) {
-            val chatId = getChatroomId(getCurrentUid()!!, otherUserId!!)
-            getChatroom(chatId).get().addOnCompleteListener {
-                if (it.isSuccessful) {
-                    if (it.result.exists()) {
-                        chatroomModelResponse =
-                            it.result.toObject(ChatroomModelResponse::class.java)
-                    } else {
-                        if (chatroomModelResponse == null) {
-                            val chatSend = ChatroomModel(
-                                chatId,
-                                listOf(getCurrentUid()!!, otherUserId!!),
-                                Timestamp(System.currentTimeMillis()),
-                                ""
-                            )
-                            getChatroom(chatId).set(chatSend)
+            chatroomId = getChatroomId(getCurrentUid()!!, otherUserId!!)
+            if (chatroomId != null) {
+                getChatroom(chatroomId!!).get().addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        if (it.result.exists()) {
+                            chatroomModelResponse =
+                                it.result.toObject(ChatroomModelResponse::class.java)
+                        } else {
+                            if (chatroomModelResponse == null) {
+                                val chatSend = ChatroomModel(
+                                    chatroomId!!,
+                                    listOf(getCurrentUid()!!, otherUserId!!),
+                                    Timestamp(System.currentTimeMillis()),
+                                    ""
+                                )
+                                getChatroom(chatroomId!!).set(chatSend)
+                            }
                         }
                     }
                 }
@@ -80,8 +85,30 @@ class ChatFragment : Fragment() {
 
     private fun sendMsg() {
         val txtMsg = binding.loginEtMsg.text.toString().trim()
-        if (!txtMsg.isEmpty()) {
+        if (txtMsg.isNotEmpty()) {
+            if (getCurrentUid() != null
+                && chatroomId != null
+            ) {
+                val chatSend = ChatroomModel(
+                    chatroomId = chatroomId!!,
+                    listUser = listOf(getCurrentUid()!!, otherUserId!!),
+                    timestamp = Timestamp(System.currentTimeMillis()),
+                    lastMsgSenderId = getCurrentUid()!!
+                )
+                getChatroom(chatroomId!!).set(chatSend)
 
+                val chatModel = ChatMsgModel(
+                    txtMsg,
+                    getCurrentUid()!!,
+                    Timestamp(System.currentTimeMillis())
+                )
+                getChatroomMsg(chatroomModelResponse!!.chatroomId).add(chatModel)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            binding.loginEtMsg.text = null
+                        }
+                    }
+            }
         } else {
             binding.loginEtMsg.error
         }

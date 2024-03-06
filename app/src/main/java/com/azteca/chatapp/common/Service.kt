@@ -13,6 +13,7 @@ class Service {
     companion object {
         private const val collectUser = "user"
         private const val collectChatsR = "chatRoom"
+        private const val collectChat = "chats"
         const val dbUsername = "username"
 
         fun getFirebaseAuth(): FirebaseAuth {
@@ -38,6 +39,10 @@ class Service {
 
         fun getChatroom(chatRoomId: String): DocumentReference {
             return FirebaseFirestore.getInstance().collection(collectChatsR).document(chatRoomId)
+        }
+
+        fun getChatroomMsg(chatRoomId: String): CollectionReference {
+            return getChatroom(chatRoomId).collection(collectChat)
         }
 
         fun getChatroomId(userId1: String, userId2: String): String {

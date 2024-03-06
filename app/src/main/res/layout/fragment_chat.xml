@@ -69,7 +69,6 @@
         android:background="@drawable/style_input"
         android:elevation="4dp"
         android:hint="@string/chat_enter_msg"
-        android:inputType="number"
         android:padding="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/searchIvSend"

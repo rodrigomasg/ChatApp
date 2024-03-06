@@ -27,12 +27,13 @@ class Login1Fragment : Fragment() {
 
         binding.loginCodeCountry.registerCarrierNumberEditText(binding.loginEtNumber)
         binding.loginBtnSend.setOnClickListener {
-            if (!binding.loginCodeCountry.isValidFullNumber){
+            if (!binding.loginCodeCountry.isValidFullNumber) {
                 binding.loginEtNumber.error = getString(R.string.login_err_number)
+            } else {
+                findNavController().navigate(
+                    Login1FragmentDirections.actionLogin1FragmentToLogin2Fragment(binding.loginCodeCountry.fullNumberWithPlus)
+                )
             }
-            findNavController().navigate(
-                Login1FragmentDirections.actionLogin1FragmentToLogin2Fragment(binding.loginCodeCountry.fullNumberWithPlus)
-            )
         }
     }
 }

@@ -26,6 +26,13 @@
     <string name="main_menu1">Chats</string>
     <string name="main_menu2">Profile</string>
 
+    <!--    search-->
+    <string name="search_title">Buscar usuarios</string>
+    <string name="search_item_me">(YO)</string>
+
+    <!--    Chat-->
+    <string name="chat_enter_msg">Escribe un mensaje</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

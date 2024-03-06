@@ -3,18 +3,16 @@ package com.azteca.chatapp.common
 import com.azteca.chatapp.data.model.UserModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 
 class Service {
 
 
-
     companion object {
         private const val collectUser = "user"
+        private const val collectChatsR = "chatRoom"
         const val dbUsername = "username"
 
         fun getFirebaseAuth(): FirebaseAuth {
@@ -33,8 +31,22 @@ class Service {
             return FirebaseFirestore.getInstance().collection(collectUser).document(userId)
         }
 
-        fun setInfUser(userModel: UserModel): Task<Void> {
-            return FirebaseFirestore.getInstance().collection(collectUser).document().set(userModel)
+        fun setInfUser(userId: String, userModel: UserModel): Task<Void> {
+            return FirebaseFirestore.getInstance().collection(collectUser).document(userId)
+                .set(userModel)
         }
+
+        fun getChatroom(chatRoomId: String): DocumentReference {
+            return FirebaseFirestore.getInstance().collection(collectChatsR).document(chatRoomId)
+        }
+
+        fun getChatroomId(userId1: String, userId2: String): String {
+            return if (userId1.hashCode() < userId2.hashCode()) {
+                userId1 + "_" + userId2
+            } else {
+                userId2 + "_" + userId1
+            }
+        }
+
     }
 }

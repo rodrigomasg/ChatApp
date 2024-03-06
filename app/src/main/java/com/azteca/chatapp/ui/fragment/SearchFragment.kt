@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.azteca.chatapp.common.Service.Companion.collectionUser
 import com.azteca.chatapp.common.Service.Companion.dbUsername
-import com.azteca.chatapp.common.Service.Companion.firestoreAllUser
 import com.azteca.chatapp.data.model.UserModelResponse
 import com.azteca.chatapp.databinding.FragmentSearchBinding
 import com.azteca.chatapp.ui.adapter.SearchAdapter
@@ -53,7 +53,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun searchQuery(txtUsername: String) {
-        val query = firestoreAllUser.whereGreaterThanOrEqualTo(dbUsername, txtUsername)
+        val query = collectionUser().whereGreaterThanOrEqualTo(dbUsername, txtUsername)
         val opts = FirestoreRecyclerOptions
             .Builder<UserModelResponse>()
             .setQuery(query, UserModelResponse::class.java)

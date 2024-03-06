@@ -14,7 +14,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 
 class SearchAdapter(
     options: FirestoreRecyclerOptions<UserModelResponse>,
-    val itemListener: (UserModelResponse) -> Unit
+    private val itemListener: (UserModelResponse) -> Unit
 ) : FirestoreRecyclerAdapter<UserModelResponse, SearchAdapter.ViewHolder>(options) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,7 +34,7 @@ class SearchAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(model: UserModelResponse, itemListener: (UserModelResponse) -> Unit) {
             binding.itemTvUsername.text =
-                if (Service.currentUid == model.userId) model.username + itemView.context.getString(
+                if (Service.getCurrentUid() == model.userId) model.username + itemView.context.getString(
                     R.string.search_item_me
                 ) else model.username
             binding.itemTvNumber.text = model.phone

@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.azteca.chatapp.R
-import com.azteca.chatapp.common.Service.Companion.firebaseAuth
+import com.azteca.chatapp.common.Service.Companion.getFirebaseAuth
 import com.azteca.chatapp.databinding.FragmentLogin2Binding
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -154,7 +154,7 @@ class Login2Fragment : Fragment() {
     }
 
     private fun sendCode() {
-        val options = PhoneAuthOptions.newBuilder(firebaseAuth)
+        val options = PhoneAuthOptions.newBuilder(getFirebaseAuth())
             .setPhoneNumber(txtNumber) // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
             .setActivity(requireActivity()) // Activity (for callback binding)
@@ -165,7 +165,7 @@ class Login2Fragment : Fragment() {
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener {
+        getFirebaseAuth().signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
                 Log.e(TAG, "auth success change fragment")
                 findNavController().navigate(

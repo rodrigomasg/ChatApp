@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.azteca.chatapp.common.Service.Companion.dbUsername
 import com.azteca.chatapp.common.Service.Companion.firestoreAllUser
@@ -57,14 +58,18 @@ class SearchFragment : Fragment() {
             .Builder<UserModelResponse>()
             .setQuery(query, UserModelResponse::class.java)
             .build()
-        adapter = SearchAdapter(opts) { toChat() }
+        adapter = SearchAdapter(opts) { toChat(it) }
         binding.searchRv.layoutManager = LinearLayoutManager(requireContext())
         binding.searchRv.adapter = adapter
         adapter!!.startListening()
     }
 
-    private fun toChat() {
-        TODO("Not yet implemented")
+    private fun toChat(userModelResponse: UserModelResponse) {
+        if (userModelResponse.userId != null) {
+            findNavController().navigate(
+                SearchFragmentDirections.actionSearchFragmentToChatFragment(userModelResponse.userId!!)
+            )
+        }
     }
 
     override fun onStop() {

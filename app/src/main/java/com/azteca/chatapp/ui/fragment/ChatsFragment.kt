@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.azteca.chatapp.R
+import com.azteca.chatapp.common.SharedPrefs
 import com.azteca.chatapp.databinding.FragmentChatsBinding
 
 class ChatsFragment : Fragment() {
@@ -24,6 +25,7 @@ class ChatsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        SharedPrefs(requireContext()).setValueLogin(true)
         initListeners()
     }
 

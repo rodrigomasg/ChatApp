@@ -107,6 +107,7 @@ class ChatFragment : Fragment() {
                                     chatroomId!!,
                                     listOf(getCurrentUid()!!, otherUserId!!),
                                     Timestamp(System.currentTimeMillis()),
+                                    "",
                                     ""
                                 )
                                 getChatroom(chatroomId!!).set(chatSend)
@@ -128,7 +129,8 @@ class ChatFragment : Fragment() {
                     chatroomId = chatroomId!!,
                     listUser = listOf(getCurrentUid()!!, otherUserId!!),
                     timestamp = Timestamp(System.currentTimeMillis()),
-                    lastMsgSenderId = getCurrentUid()!!
+                    lastMsgSenderId = getCurrentUid()!!,
+                    txtMsg
                 )
                 getChatroom(chatroomId!!).set(chatSend)
 

@@ -7,6 +7,7 @@ data class ChatroomModel(
     var listUser: List<String>,
     var timestamp: Timestamp,
     var lastMsgSenderId: String,
+    var lastMsg: String,
 )
 
 data class ChatroomModelResponse(
@@ -14,6 +15,7 @@ data class ChatroomModelResponse(
     var listUser: List<String>,
     var timestamp: java.util.Date?,
     var lastMsgSenderId: String,
+    var lastMsg: String,
 ) {
-    constructor() : this("", emptyList(), null, "")
+    constructor() : this("", emptyList(), null, "", "")
 }

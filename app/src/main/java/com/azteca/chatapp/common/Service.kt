@@ -9,6 +9,7 @@ class Service {
 
     companion object {
         private const val collectUser = "user"
+        const val dbUsername = "username"
 
 
         val firebaseAuth = FirebaseAuth.getInstance()
@@ -17,6 +18,7 @@ class Service {
             currentUid?.let {
                 FirebaseFirestore.getInstance().collection(collectUser).document(it)
             }
+        val firestoreAllUser = FirebaseFirestore.getInstance().collection(collectUser)
         val isLogin = currentUid != null
     }
 }

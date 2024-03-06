@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.azteca.chatapp.R
+import com.azteca.chatapp.common.Service.Companion.currentUid
 import com.azteca.chatapp.common.Service.Companion.firestoreUsers
 import com.azteca.chatapp.data.model.UserModel
 import com.azteca.chatapp.databinding.FragmentLogin3Binding
@@ -60,6 +61,7 @@ class Login3Fragment : Fragment() {
         } else {
             binding.login3Pg.isVisible = true
             val userModel = UserModel(
+                currentUid.toString(),
                 txtNumber,
                 txtUsername.toString(),
                 Timestamp(System.currentTimeMillis())

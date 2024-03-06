@@ -22,7 +22,7 @@ class Service {
         }
 
         fun getCurrentUid(): String? {
-            return Firebase.auth.uid
+            return FirebaseAuth.getInstance().uid
         }
 
         fun collectionUser(): CollectionReference {

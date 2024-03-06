@@ -15,6 +15,7 @@ class Service {
         private const val collectChatsR = "chatRoom"
         private const val collectChat = "chats"
         const val dbUsername = "username"
+        const val dbTimestamp = "timestamp"
 
         fun getFirebaseAuth(): FirebaseAuth {
             return FirebaseAuth.getInstance()

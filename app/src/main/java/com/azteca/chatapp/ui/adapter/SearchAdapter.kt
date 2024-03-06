@@ -14,7 +14,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 
 class SearchAdapter(
     options: FirestoreRecyclerOptions<UserModelResponse>,
-    val itemListener: (UserModelResponse) -> Unit
+    private val itemListener: (UserModelResponse) -> Unit
 ) : FirestoreRecyclerAdapter<UserModelResponse, SearchAdapter.ViewHolder>(options) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

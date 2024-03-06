@@ -2,6 +2,7 @@ package com.azteca.chatapp.common
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
@@ -20,5 +21,8 @@ class Service {
             }
         val firestoreAllUser = FirebaseFirestore.getInstance().collection(collectUser)
         val isLogin = currentUid != null
+        fun getInfUser(userId: String): DocumentReference {
+            return FirebaseFirestore.getInstance().collection(collectUser).document(userId)
+        }
     }
 }

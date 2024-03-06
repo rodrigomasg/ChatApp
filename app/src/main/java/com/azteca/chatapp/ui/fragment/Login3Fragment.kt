@@ -10,8 +10,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.azteca.chatapp.R
-import com.azteca.chatapp.common.Service.Companion.currentUid
-import com.azteca.chatapp.common.Service.Companion.firestoreUsers
+import com.azteca.chatapp.common.Service.Companion.getCurrentUid
+import com.azteca.chatapp.common.Service.Companion.setInfUser
 import com.azteca.chatapp.data.model.UserModel
 import com.azteca.chatapp.databinding.FragmentLogin3Binding
 import com.azteca.chatapp.ui.MainActivity
@@ -42,12 +42,7 @@ class Login3Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initComponents()
         initListeners()
-    }
-
-    private fun initComponents() {
-        getUsername()
     }
 
     private fun initListeners() {
@@ -59,14 +54,15 @@ class Login3Fragment : Fragment() {
         if (txtUsername.isNullOrEmpty()) {
             binding.loginEtNumber.error = getString(R.string.login_username_input)
         } else {
+            Log.e(TAG, "se creara")
             binding.login3Pg.isVisible = true
             val userModel = UserModel(
-                currentUid.toString(),
+                getCurrentUid(),
                 txtNumber,
                 txtUsername.toString(),
                 Timestamp(System.currentTimeMillis())
             )
-            firestoreUsers?.set(userModel)?.addOnCompleteListener {
+            setInfUser(userModel).addOnCompleteListener {
                 if (it.isSuccessful) {
                     binding.login3Pg.isVisible = false
                     requireActivity().finish()
@@ -78,21 +74,4 @@ class Login3Fragment : Fragment() {
             }
         }
     }
-
-    private fun getUsername() {
-        binding.login3Pg.isVisible = true
-        firestoreUsers?.get()?.addOnCompleteListener {
-            if (it.isSuccessful) {
-                binding.login3Pg.isVisible = false
-                val user = it.result.toObject(UserModel::class.java)
-                Log.e(TAG, user?.username ?: "")
-                if (!user?.username.isNullOrEmpty()) {
-                    requireActivity().finish()
-                    startActivity(Intent(requireContext(), MainActivity::class.java))
-                    binding.loginEtNumber.setText(user?.username ?: "")
-                }
-            }
-        }
-    }
-
 }

@@ -34,7 +34,7 @@ class SearchAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(model: UserModelResponse, itemListener: (UserModelResponse) -> Unit) {
             binding.itemTvUsername.text =
-                if (Service.currentUid == model.userId) model.username + itemView.context.getString(
+                if (Service.getCurrentUid() == model.userId) model.username + itemView.context.getString(
                     R.string.search_item_me
                 ) else model.username
             binding.itemTvNumber.text = model.phone

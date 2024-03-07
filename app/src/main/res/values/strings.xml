@@ -33,6 +33,12 @@
     <!--    Chat-->
     <string name="chat_enter_msg">Escribe un mensaje</string>
 
+    <!--    profile-->
+    <string name="profile_btn">Actulizar</string>
+    <string name="profile_logout">Cerrar sesion</string>
+    <string name="profile_profile">Perfil</string>
+    <string name="profile_data_updated">Datos actulizados</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

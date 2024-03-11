@@ -11,6 +11,8 @@ import com.azteca.chatapp.common.Service.Companion.getCurrentUid
 import com.azteca.chatapp.data.model.ChatroomModelResponse
 import com.azteca.chatapp.data.model.UserModelResponse
 import com.azteca.chatapp.databinding.ItemChatHomeBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 
@@ -43,6 +45,19 @@ class HomeChatAdapter(
                         if (model.lastMsgSenderId == getCurrentUid()) " Yo: ${model.lastMsg}" else model.lastMsg
                     binding.itemTvTime.text =
                         model.timestamp?.let { it1 -> Service.timeToTime(it1) }
+
+
+                    Service.refImgProfileUser(
+                        useModel?.userId ?: ""
+                    ).downloadUrl.addOnCompleteListener { ref ->
+                        if (ref.isSuccessful) {
+                            val uri = ref.result
+                            Glide.with(itemView.context)
+                                .load(uri)
+                                .apply(RequestOptions.circleCropTransform())
+                                .into(binding.itemIvUser)
+                        }
+                    }
 
                     itemView.setOnClickListener { useModel?.let { it1 -> itemListener(it1) } }
                 }

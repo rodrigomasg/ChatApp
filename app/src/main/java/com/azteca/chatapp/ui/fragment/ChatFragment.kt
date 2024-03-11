@@ -19,6 +19,8 @@ import com.azteca.chatapp.data.model.ChatroomModel
 import com.azteca.chatapp.data.model.ChatroomModelResponse
 import com.azteca.chatapp.databinding.FragmentChatBinding
 import com.azteca.chatapp.ui.adapter.ChatAdapter
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.Query
 import java.sql.Timestamp
@@ -95,6 +97,18 @@ class ChatFragment : Fragment() {
     private fun getChatRoomId() {
         if (getCurrentUid() != null && otherUserId != null) {
             chatroomId = getChatroomId(getCurrentUid()!!, otherUserId!!)
+            Service.refImgProfileUser(
+                otherUserId ?: ""
+            ).downloadUrl.addOnCompleteListener { ref ->
+                if (ref.isSuccessful) {
+                    val uri = ref.result
+                    Glide.with(requireContext())
+                        .load(uri)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(binding.searchIvPhoto)
+                }
+            }
+
             if (chatroomId != null) {
                 getChatroom(chatroomId!!).get().addOnCompleteListener {
                     if (it.isSuccessful) {

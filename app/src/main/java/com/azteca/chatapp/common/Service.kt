@@ -6,6 +6,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -16,7 +18,8 @@ class Service {
     companion object {
         private const val collectUser = "user"
         private const val collectChatsR = "chatRoom"
-        private const val collectChat = "chats"
+        private const val collectChat = "chatProf"
+        private const val stgUserPro = "userPdof"
         const val dbUsername = "username"
         const val dbListUser = "listUser"
         const val dbTimestamp = "timestamp"
@@ -72,6 +75,10 @@ class Service {
 
         fun timeToTime(timestamp: Date): String {
             return SimpleDateFormat("HH:MM", Locale.getDefault()).format(timestamp)
+        }
+
+        fun refImgProfileUser(userId: String): StorageReference {
+            return FirebaseStorage.getInstance().getReference().child(stgUserPro).child(userId)
         }
 
     }

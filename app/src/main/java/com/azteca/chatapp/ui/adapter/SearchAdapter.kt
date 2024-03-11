@@ -9,6 +9,8 @@ import com.azteca.chatapp.R
 import com.azteca.chatapp.common.Service
 import com.azteca.chatapp.data.model.UserModelResponse
 import com.azteca.chatapp.databinding.ItemUserBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 
@@ -39,6 +41,18 @@ class SearchAdapter(
                 ) else model.username
             binding.itemTvNumber.text = model.phone
             itemView.setOnClickListener { itemListener(model) }
+
+            Service.refImgProfileUser(
+                model.userId ?: ""
+            ).downloadUrl.addOnCompleteListener { ref ->
+                if (ref.isSuccessful) {
+                    val uri = ref.result
+                    Glide.with(itemView.context)
+                        .load(uri)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(binding.itemIvUser)
+                }
+            }
         }
     }
 }

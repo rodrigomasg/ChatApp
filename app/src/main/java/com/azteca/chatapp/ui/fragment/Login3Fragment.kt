@@ -61,7 +61,8 @@ class Login3Fragment : Fragment() {
                     getCurrentUid(),
                     txtNumber,
                     txtUsername.toString(),
-                    Timestamp(System.currentTimeMillis())
+                    Timestamp(System.currentTimeMillis()),
+                    ""
                 )
                 setInfUser(getCurrentUid()!!, userModel).addOnCompleteListener {
                     if (it.isSuccessful) {

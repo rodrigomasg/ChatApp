@@ -66,7 +66,7 @@ class ChatsFragment : Fragment() {
         }
     }
 
-    private fun toChat(it: UserModelResponse) {
+    fun toChat(it: UserModelResponse) {
         if (it.userId != null) {
             findNavController().navigate(
                 ChatsFragmentDirections.actionChatsFragmentToChatFragment(

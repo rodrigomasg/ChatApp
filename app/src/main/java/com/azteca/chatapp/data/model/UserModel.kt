@@ -8,6 +8,7 @@ data class UserModel(
     var phone: String,
     var username: String,
     var timestamp: Timestamp?,
+    var fcmToken: String,
 )
 
 data class UserModelResponse(

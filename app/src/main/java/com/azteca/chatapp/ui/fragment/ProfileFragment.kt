@@ -18,8 +18,10 @@ import com.azteca.chatapp.common.Service.Companion.refImgProfileUser
 import com.azteca.chatapp.data.model.UserModel
 import com.azteca.chatapp.data.model.UserModelResponse
 import com.azteca.chatapp.databinding.FragmentProfileBinding
+import com.azteca.chatapp.ui.MainActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.messaging.FirebaseMessaging
 import java.sql.Timestamp
 
 class ProfileFragment : Fragment() {
@@ -92,7 +94,8 @@ class ProfileFragment : Fragment() {
                 userModel!!.userId,
                 userModel!!.phone,
                 newUsername,
-                Timestamp(System.currentTimeMillis())
+                Timestamp(System.currentTimeMillis()),
+                MainActivity.txtFmcToken
             )
             getInfUser(getCurrentUid()!!).set(sendModel).addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -137,9 +140,13 @@ class ProfileFragment : Fragment() {
     }
 
     private fun userLogout() {
-        /*FirebaseAuth.getInstance().signOut()
-        requireActivity().finish()
-        SharedPrefs(requireContext()).setValueLogin(false)
-        startActivity(Intent(requireContext(), LoginActivity::class.java))*/
+        FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener {
+            if (it.isSuccessful) {
+                /*FirebaseAuth.getInstance().signOut()
+                requireActivity().finish()
+                SharedPrefs(requireContext()).setValueLogin(false)
+                startActivity(Intent(requireContext(), LoginActivity::class.java))*/
+            }
+        }
     }
 }

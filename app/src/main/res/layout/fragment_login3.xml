@@ -109,4 +109,15 @@
         app:layout_constraintStart_toStartOf="@id/guidelineV1"
         app:layout_constraintTop_toBottomOf="@id/loginEtNumber" />
 
+    <ProgressBar
+        android:id="@+id/login3Pg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

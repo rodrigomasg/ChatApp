@@ -6,11 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.azteca.chatapp.R
-import com.azteca.chatapp.common.Service.Companion.firestoreUsers
-import com.azteca.chatapp.data.UserModel
+import com.azteca.chatapp.common.Service.Companion.getCurrentUid
+import com.azteca.chatapp.common.Service.Companion.setInfUser
+import com.azteca.chatapp.data.model.UserModel
 import com.azteca.chatapp.databinding.FragmentLogin3Binding
 import com.azteca.chatapp.ui.MainActivity
 import java.sql.Timestamp
@@ -40,12 +42,7 @@ class Login3Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initComponents()
         initListeners()
-    }
-
-    private fun initComponents() {
-        getUsername()
     }
 
     private fun initListeners() {
@@ -57,29 +54,27 @@ class Login3Fragment : Fragment() {
         if (txtUsername.isNullOrEmpty()) {
             binding.loginEtNumber.error = getString(R.string.login_username_input)
         } else {
-            val userModel = UserModel(
-                txtNumber,
-                txtUsername.toString(),
-                Timestamp(System.currentTimeMillis())
-            )
-            firestoreUsers?.set(userModel)?.addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val main = Intent(requireContext(), MainActivity::class.java)
-                    startActivity(main)
-                } else {
-                    Log.e(TAG, it.result.toString())
+            Log.e(TAG, "se creara")
+            binding.login3Pg.isVisible = true
+            if (!getCurrentUid().isNullOrEmpty()) {
+                val userModel = UserModel(
+                    getCurrentUid(),
+                    txtNumber,
+                    txtUsername.toString(),
+                    Timestamp(System.currentTimeMillis()),
+                    ""
+                )
+                setInfUser(getCurrentUid()!!, userModel).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        binding.login3Pg.isVisible = false
+                        requireActivity().finish()
+                        startActivity(Intent(requireContext(), MainActivity::class.java))
+                    } else {
+                        binding.login3Pg.isVisible = false
+                        Log.e(TAG, it.result.toString())
+                    }
                 }
             }
         }
     }
-
-    private fun getUsername() {
-        firestoreUsers?.get()?.addOnCompleteListener {
-            if (it.isSuccessful) {
-                val user = it.result.toObject(UserModel::class.java)
-                binding.loginEtNumber.setText(user?.username ?: "")
-            }
-        }
-    }
-
 }

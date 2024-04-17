@@ -6,12 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.azteca.chatapp.R
-import com.azteca.chatapp.common.Service.Companion.firebaseAuth
+import com.azteca.chatapp.common.Service.Companion.getFirebaseAuth
 import com.azteca.chatapp.databinding.FragmentLogin2Binding
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -34,6 +35,7 @@ class Login2Fragment : Fragment() {
     private var timerOut = 60L
     private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
     private var verifyId: String? = null
+    private var timer: Timer? = null
 
     private val callBackAuth = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
@@ -133,28 +135,31 @@ class Login2Fragment : Fragment() {
     }
 
     private fun startResendCodeTimer() {
-        val timer = Timer()
-        timer.schedule(object : TimerTask() {
-            @SuppressLint("SetTextI18n")
-            override fun run() {
-                timerOut--
-                requireActivity().runOnUiThread {
-                    binding.loginTvResend.isEnabled = false
-                    binding.loginTvResend.text = "${getText(R.string.login_resend_code)} $timerOut "
-                }
-                if (timerOut <= 0) {
-                    timerOut = 60L
-                    timer.cancel()
+        timer = Timer()
+        if (timer != null) {
+            timer!!.schedule(object : TimerTask() {
+                @SuppressLint("SetTextI18n")
+                override fun run() {
+                    timerOut--
                     requireActivity().runOnUiThread {
-                        binding.loginTvResend.isEnabled = true
+                        binding.loginTvResend.isEnabled = false
+                        binding.loginTvResend.text =
+                            "${getText(R.string.login_resend_code)} $timerOut "
+                    }
+                    if (timerOut <= 0) {
+                        timerOut = 60L
+                        timer!!.cancel()
+                        requireActivity().runOnUiThread {
+                            binding.loginTvResend.isEnabled = true
+                        }
                     }
                 }
-            }
-        }, 0, 1000)
+            }, 0, 1000)
+        }
     }
 
     private fun sendCode() {
-        val options = PhoneAuthOptions.newBuilder(firebaseAuth)
+        val options = PhoneAuthOptions.newBuilder(getFirebaseAuth())
             .setPhoneNumber(txtNumber) // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
             .setActivity(requireActivity()) // Activity (for callback binding)
@@ -165,17 +170,24 @@ class Login2Fragment : Fragment() {
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener {
+        getFirebaseAuth().signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
                 Log.e(TAG, "auth success change fragment")
                 findNavController().navigate(
                     Login2FragmentDirections.actionLogin2FragmentToLogin3Fragment(txtNumber)
                 )
             } else {
-                Log.e(TAG, "auth error")
+                Log.e(TAG, "auth error ${it.result}")
+                Toast.makeText(requireContext(), "auth error ${it.result}", Toast.LENGTH_LONG)
+                    .show()
             }
         }
     }
 
-
+    override fun onStop() {
+        super.onStop()
+        // Detener y limpiar el timer cuando el Fragmento se detiene
+        timer?.cancel()
+        timer = null
+    }
 }

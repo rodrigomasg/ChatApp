@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.ProfileFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/profileToolbar"
+        android:layout_width="0dp"
+        android:layout_height="?actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/profileIvBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:contentDescription="@string/all_descr_icon"
+            android:padding="8dp"
+            android:src="@drawable/arrow_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/profile_profile"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/profileIvBack"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineH1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.20" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelinev1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.10" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelinev2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.90" />
+
+    <ImageView
+        android:id="@+id/profileIvUser"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:contentDescription="@string/all_descr_icon"
+        android:src="@drawable/account_circle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guidelineH1" />
+
+    <EditText
+        android:id="@+id/profileEtUsername"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:background="@drawable/style_input"
+        android:elevation="4dp"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="@id/guidelinev2"
+        app:layout_constraintStart_toStartOf="@id/guidelinev1"
+        app:layout_constraintTop_toBottomOf="@id/profileIvUser"
+        tools:hint="username" />
+
+    <EditText
+        android:id="@+id/profileEtNumber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:autofillHints=""
+        android:background="@drawable/style_input"
+        android:elevation="4dp"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="@id/guidelinev2"
+        app:layout_constraintStart_toStartOf="@id/guidelinev1"
+        app:layout_constraintTop_toBottomOf="@id/profileEtUsername"
+        tools:hint="numero" />
+
+    <Button
+        android:id="@+id/updateBtnSend"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/style_btn"
+        android:text="@string/profile_btn"
+        app:layout_constraintEnd_toEndOf="@id/guidelinev2"
+        app:layout_constraintStart_toStartOf="@id/guidelinev1"
+        app:layout_constraintTop_toBottomOf="@id/profileEtNumber" />
+
+    <TextView
+        android:id="@+id/profileTvLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:enabled="false"
+        android:padding="8dp"
+        android:text="@string/profile_logout"
+        app:layout_constraintEnd_toEndOf="@id/guidelinev2"
+        app:layout_constraintStart_toStartOf="@id/guidelinev1"
+        app:layout_constraintTop_toBottomOf="@id/updateBtnSend" />
+
+    <ProgressBar
+        android:id="@+id/profilePg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

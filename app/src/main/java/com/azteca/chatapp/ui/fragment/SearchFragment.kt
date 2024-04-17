@@ -53,7 +53,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun searchQuery(txtUsername: String) {
-        val query = collectionUser().whereGreaterThanOrEqualTo(dbUsername, txtUsername)
+        val query = collectionUser()
+            .whereGreaterThanOrEqualTo(dbUsername, txtUsername)
+            .whereLessThanOrEqualTo(dbUsername, txtUsername + '\uf8ff')
+
         val opts = FirestoreRecyclerOptions
             .Builder<UserModelResponse>()
             .setQuery(query, UserModelResponse::class.java)

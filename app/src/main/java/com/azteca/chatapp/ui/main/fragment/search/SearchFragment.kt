@@ -1,20 +1,18 @@
-package com.azteca.chatapp.ui.main.fragment
+package com.azteca.chatapp.ui.main.fragment.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.azteca.chatapp.common.Service.Companion.collectionUser
-import com.azteca.chatapp.common.Service.Companion.dbUsername
+import com.azteca.chatapp.common.SharedPrefs
 import com.azteca.chatapp.data.model.UserModelResponse
 import com.azteca.chatapp.databinding.FragmentSearchBinding
 import com.azteca.chatapp.ui.adapter.SearchAdapter
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import dagger.hilt.android.AndroidEntryPoint
-
 
 private const val TAG = "searchFragment"
 
@@ -22,6 +20,7 @@ private const val TAG = "searchFragment"
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: SearchViewModel by viewModels()
     private var adapter: SearchAdapter? = null
     private val searchUser = object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
         override fun onQueryTextChange(newText: String?): Boolean {
@@ -55,18 +54,18 @@ class SearchFragment : Fragment() {
     }
 
     private fun searchQuery(txtUsername: String) {
-        val query = collectionUser()
-            .whereGreaterThanOrEqualTo(dbUsername, txtUsername)
-            .whereLessThanOrEqualTo(dbUsername, txtUsername + '\uf8ff')
+        viewModel.querySearch(txtUsername) { opts ->
+            adapter = SearchAdapter(
+                uuid = SharedPrefs(requireContext()).getUuid(),
+                options = opts,
+                viewModel = viewModel,
+                itemListener = { toChat(it) }
+            )
+            adapter!!.startListening()
+        }
 
-        val opts = FirestoreRecyclerOptions
-            .Builder<UserModelResponse>()
-            .setQuery(query, UserModelResponse::class.java)
-            .build()
-        adapter = SearchAdapter(opts) { toChat(it) }
         binding.searchRv.layoutManager = LinearLayoutManager(requireContext())
         binding.searchRv.adapter = adapter
-        adapter!!.startListening()
     }
 
     private fun toChat(userModelResponse: UserModelResponse) {

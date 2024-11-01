@@ -6,25 +6,23 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity.INPUT_METHOD_SERVICE
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.azteca.chatapp.R
-import com.azteca.chatapp.common.Service
 import com.azteca.chatapp.databinding.FragmentLogin2Binding
-import com.google.firebase.FirebaseException
-import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthOptions
-import com.google.firebase.auth.PhoneAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.util.Timer
 import java.util.TimerTask
-import java.util.concurrent.TimeUnit
 
 private const val TAG = "loginFragment2"
 
@@ -32,70 +30,17 @@ private const val TAG = "loginFragment2"
 class Login2Fragment : Fragment() {
     private var _binding: FragmentLogin2Binding? = null
     private val binding get() = _binding!!
+    private val viewModel: Login2ViewModel by viewModels()
     private val args: Login2FragmentArgs by navArgs()
     private lateinit var txtNumber: String
     private var timerOut = 60L
-    private lateinit var forceResendingToken: PhoneAuthProvider.ForceResendingToken
-    private var verifyId: String? = null
     private var timer: Timer? = null
-
-    private val callBackAuth = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
-        override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-            // This callback will be invoked in two situations:
-            // 1 - Instant verification. In some cases the phone number can be instantly
-            //     verified without needing to send or enter a verification code.
-            // 2 - Auto-retrieval. On some devices Google Play services can automatically
-            //     detect the incoming verification SMS and perform verification without
-            //     user action.
-            Log.d(TAG, "onVerificationCompleted:$credential")
-            binding.login2Pg.isVisible = false
-            signInWithPhoneAuthCredential(credential)
-        }
-
-        override fun onVerificationFailed(e: FirebaseException) {
-            // This callback is invoked in an invalid request for verification is made,
-            // for instance if the the phone number format is not valid.
-            Log.w(TAG, "onVerificationFailed", e)
-            binding.login2Pg.isVisible = false
-            when (e) {
-                is FirebaseAuthInvalidCredentialsException -> {
-                    // Invalid request
-                    Log.w(TAG, "onVerificationFailed", e)
-                }
-
-                is FirebaseTooManyRequestsException -> {
-                    Log.w(TAG, "onVerificationFailed", e)
-                    // The SMS quota for the project has been exceeded
-                }
-
-                is FirebaseAuthMissingActivityForRecaptchaException -> {
-                    Log.w(TAG, "onVerificationFailed", e)
-                    // reCAPTCHA verification attempted with null Activity
-                }
-            }
-            // Show a message and update the UI
-        }
-
-        override fun onCodeSent(
-            verificationId: String,
-            token: PhoneAuthProvider.ForceResendingToken,
-        ) {
-            // The SMS verification code has been sent to the provided phone number, we
-            // now need to ask the user to enter the code and then construct a credential
-            // by combining the code with a verification ID.
-            Log.d(TAG, "onCodeSent:$verificationId")
-            binding.login2Pg.isVisible = false
-
-            // Save verification ID and resending token so we can use them later
-            verifyId = verificationId
-            forceResendingToken = token
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        txtNumber = args.number
+        /*txtNumber = args.number*/
+        /**prueba*/
+        txtNumber = "+52 9999999922"
     }
 
     override fun onCreateView(
@@ -112,23 +57,32 @@ class Login2Fragment : Fragment() {
 
         initComponents()
         listeners()
+        initVM()
+    }
+
+    private fun initVM() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.loading.collect {
+                    binding.login2Pg.isVisible = it
+                }
+            }
+        }
     }
 
     private fun initComponents() {
-        binding.login2Pg.isVisible = true
-        sendCode()
         startResendCodeTimer()
+        sendCode()
     }
 
     private fun listeners() {
         binding.loginBtnSend.setOnClickListener {
-            if (!binding.loginEtNumber.text.isNullOrEmpty()
-                && verifyId != null
-            ) {
-                val cred = PhoneAuthProvider.getCredential(
-                    verifyId!!, binding.loginEtNumber.text.toString()
-                )
-                signInWithPhoneAuthCredential(cred)
+            if (binding.loginBtnSend.text?.length == 6) {
+                viewModel.verifyCode(binding.loginBtnSend.text.toString()) {
+                    findNavController().navigate(
+                        Login2FragmentDirections.actionLogin2FragmentToLogin3Fragment(txtNumber)
+                    )
+                }
             }
         }
         binding.loginTvResend.setOnClickListener {
@@ -161,29 +115,34 @@ class Login2Fragment : Fragment() {
     }
 
     private fun sendCode() {
-        val options = PhoneAuthOptions.newBuilder(Service.getFirebaseAuth())
-            .setPhoneNumber(txtNumber) // Phone number to verify
-            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-            .setActivity(requireActivity()) // Activity (for callback binding)
-            .setCallbacks(callBackAuth) // OnVerificationStateChangedCallbacks
-//            .setForceResendingToken(forceResendingToken)
-            .build()
-        PhoneAuthProvider.verifyPhoneNumber(options)
-    }
+        viewModel.loginPhone(
+            txtNumber,
+            requireActivity(),
+            onCodeSent = {
+                Log.e(TAG, "code sent")
+                Toast.makeText(requireContext(), "codigo enviado", Toast.LENGTH_LONG).show()
 
-    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
-        Service.getFirebaseAuth().signInWithCredential(credential).addOnCompleteListener {
-            if (it.isSuccessful) {
-                Log.e(TAG, "auth success change fragment")
+                /*binding.loginEtNumber.requestFocus()
+                val imm =
+                    requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(binding.loginEtNumber, InputMethodManager.SHOW_IMPLICIT)*/
+            },
+            onVerificationCodeComplete = {
+                //para pasar directo sin hacer click en comprobar code
+                Log.e(TAG, "code completeVerification")
+                Toast.makeText(requireContext(), "code sent y complete", Toast.LENGTH_LONG)
+                    .show()
                 findNavController().navigate(
                     Login2FragmentDirections.actionLogin2FragmentToLogin3Fragment(txtNumber)
                 )
-            } else {
-                Log.e(TAG, "auth error ${it.result}")
-                Toast.makeText(requireContext(), "auth error ${it.result}", Toast.LENGTH_LONG)
+            },
+            onVerificationFail = { fail ->
+                Log.e(TAG, "auth error $fail")
+                Toast.makeText(requireContext(), "auth error $fail", Toast.LENGTH_LONG)
                     .show()
             }
-        }
+
+        )
     }
 
     override fun onStop() {

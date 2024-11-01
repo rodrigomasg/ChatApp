@@ -1,9 +1,10 @@
-package com.azteca.chatapp.ui.main.fragment
+package com.azteca.chatapp.ui.main.fragment.profile
 
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,17 +12,16 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.azteca.chatapp.R
-import com.azteca.chatapp.common.Service.Companion.getCurrentUid
-import com.azteca.chatapp.common.Service.Companion.getInfUser
-import com.azteca.chatapp.common.Service.Companion.refImgProfileUser
+import com.azteca.chatapp.common.SharedPrefs
 import com.azteca.chatapp.data.model.UserModel
 import com.azteca.chatapp.data.model.UserModelResponse
 import com.azteca.chatapp.databinding.FragmentProfileBinding
+import com.azteca.chatapp.ui.login.LoginActivity
 import com.azteca.chatapp.ui.main.MainActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import java.sql.Timestamp
 
@@ -29,6 +29,7 @@ import java.sql.Timestamp
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: ProfileViewModel by viewModels()
     private var userModel: UserModelResponse? = null
     private var uriImage: Uri? = null
     private val resultLauncher =
@@ -66,24 +67,21 @@ class ProfileFragment : Fragment() {
     }
 
     private fun getProfileUser() {
-        if (getCurrentUid() != null) {
-            getInfUser(getCurrentUid()!!).get().addOnCompleteListener {
-                userModel = it.result.toObject(UserModelResponse::class.java)
+        viewModel.getUser(
+            response = { resUser ->
+                userModel = resUser
                 if (userModel != null) {
                     binding.profileEtUsername.setText(userModel!!.username)
                     binding.profileEtNumber.setText(userModel!!.phone)
                 }
+            },
+            urlImage = { url ->
+                Glide.with(requireContext())
+                    .load(url)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(binding.profileIvUser)
             }
-            refImgProfileUser(getCurrentUid()!!).downloadUrl.addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val uri = it.result
-                    Glide.with(requireContext())
-                        .load(uri)
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(binding.profileIvUser)
-                }
-            }
-        }
+        )
     }
 
     private fun validateData() {
@@ -99,38 +97,16 @@ class ProfileFragment : Fragment() {
                 Timestamp(System.currentTimeMillis()),
                 MainActivity.txtFmcToken
             )
-            getInfUser(getCurrentUid()!!).set(sendModel).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    if (uriImage != null) {
-                        upladImgUser(uriImage!!)
-                    } else {
-                        binding.profilePg.isVisible = false
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.profile_data_updated,
-                            Toast.LENGTH_LONG
-                        ).show()
-                        parentFragmentManager.popBackStack()
-                    }
+            viewModel.updateUser(sendModel, uriImage) {
+                if (it) {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.profile_data_updated,
+                        Toast.LENGTH_LONG
+                    ).show()
+                    parentFragmentManager.popBackStack()
                 }
             }
-        }
-    }
-
-    private fun upladImgUser(uriImage: Uri) {
-        getCurrentUid()?.let { imgU ->
-            refImgProfileUser(imgU).putFile(uriImage)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        parentFragmentManager.popBackStack()
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.profile_data_updated,
-                            Toast.LENGTH_LONG
-                        ).show()
-                        binding.profilePg.isVisible = false
-                    }
-                }
         }
     }
 
@@ -142,13 +118,11 @@ class ProfileFragment : Fragment() {
     }
 
     private fun userLogout() {
-        FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener {
-            if (it.isSuccessful) {
-                /*FirebaseAuth.getInstance().signOut()
-                requireActivity().finish()
-                SharedPrefs(requireContext()).setValueLogin(false)
-                startActivity(Intent(requireContext(), LoginActivity::class.java))*/
-            }
+        viewModel.logOut {
+            Log.d("perfil", "cerrar sesion")
+            requireActivity().finish()
+            SharedPrefs(requireContext()).setValueLogin(false)
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
         }
     }
 }

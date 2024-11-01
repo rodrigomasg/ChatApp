@@ -1,4 +1,4 @@
-package com.azteca.chatapp.ui.fragment
+package com.azteca.chatapp.ui.main.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,7 +18,9 @@ import com.azteca.chatapp.databinding.FragmentChatsBinding
 import com.azteca.chatapp.ui.adapter.HomeChatAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.Query
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ChatsFragment : Fragment() {
     private var _binding: FragmentChatsBinding? = null
     private val binding get() = _binding!!

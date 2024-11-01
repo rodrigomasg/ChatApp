@@ -1,4 +1,4 @@
-package com.azteca.chatapp.ui.fragment
+package com.azteca.chatapp.ui.login.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,16 +10,16 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.azteca.chatapp.R
-import com.azteca.chatapp.common.Service.Companion.getCurrentUid
-import com.azteca.chatapp.common.Service.Companion.setInfUser
+import com.azteca.chatapp.common.Service
 import com.azteca.chatapp.data.model.UserModel
 import com.azteca.chatapp.databinding.FragmentLogin3Binding
-import com.azteca.chatapp.ui.MainActivity
+import com.azteca.chatapp.ui.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 import java.sql.Timestamp
-
 
 private const val TAG = "login3"
 
+@AndroidEntryPoint
 class Login3Fragment : Fragment() {
     private var _binding: FragmentLogin3Binding? = null
     private val binding get() = _binding!!
@@ -56,15 +56,15 @@ class Login3Fragment : Fragment() {
         } else {
             Log.e(TAG, "se creara")
             binding.login3Pg.isVisible = true
-            if (!getCurrentUid().isNullOrEmpty()) {
+            if (!Service.getCurrentUid().isNullOrEmpty()) {
                 val userModel = UserModel(
-                    getCurrentUid(),
+                    Service.getCurrentUid(),
                     txtNumber,
                     txtUsername.toString(),
                     Timestamp(System.currentTimeMillis()),
                     ""
                 )
-                setInfUser(getCurrentUid()!!, userModel).addOnCompleteListener {
+                Service.setInfUser(Service.getCurrentUid()!!, userModel).addOnCompleteListener {
                     if (it.isSuccessful) {
                         binding.login3Pg.isVisible = false
                         requireActivity().finish()

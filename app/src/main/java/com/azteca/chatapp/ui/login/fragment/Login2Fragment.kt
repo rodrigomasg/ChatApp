@@ -1,4 +1,4 @@
-package com.azteca.chatapp.ui.fragment
+package com.azteca.chatapp.ui.login.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.azteca.chatapp.R
-import com.azteca.chatapp.common.Service.Companion.getFirebaseAuth
+import com.azteca.chatapp.common.Service
 import com.azteca.chatapp.databinding.FragmentLogin2Binding
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -21,12 +21,14 @@ import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Timer
 import java.util.TimerTask
 import java.util.concurrent.TimeUnit
 
 private const val TAG = "loginFragment2"
 
+@AndroidEntryPoint
 class Login2Fragment : Fragment() {
     private var _binding: FragmentLogin2Binding? = null
     private val binding get() = _binding!!
@@ -159,7 +161,7 @@ class Login2Fragment : Fragment() {
     }
 
     private fun sendCode() {
-        val options = PhoneAuthOptions.newBuilder(getFirebaseAuth())
+        val options = PhoneAuthOptions.newBuilder(Service.getFirebaseAuth())
             .setPhoneNumber(txtNumber) // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
             .setActivity(requireActivity()) // Activity (for callback binding)
@@ -170,7 +172,7 @@ class Login2Fragment : Fragment() {
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
-        getFirebaseAuth().signInWithCredential(credential).addOnCompleteListener {
+        Service.getFirebaseAuth().signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
                 Log.e(TAG, "auth success change fragment")
                 findNavController().navigate(

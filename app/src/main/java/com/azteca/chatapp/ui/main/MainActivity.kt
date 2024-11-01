@@ -1,4 +1,4 @@
-package com.azteca.chatapp.ui
+package com.azteca.chatapp.ui.main
 
 import android.os.Bundle
 import android.util.Log
@@ -7,8 +7,9 @@ import com.azteca.chatapp.common.Service.Companion.getCurrentUid
 import com.azteca.chatapp.common.Service.Companion.getInfUser
 import com.azteca.chatapp.databinding.ActivityMainBinding
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 

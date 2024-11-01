@@ -1,4 +1,4 @@
-package com.azteca.chatapp.ui.fragment
+package com.azteca.chatapp.ui.main.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,10 +23,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.Query
+import dagger.hilt.android.AndroidEntryPoint
 import java.sql.Timestamp
 
 private const val TAG = "chatFragment"
 
+@AndroidEntryPoint
 class ChatFragment : Fragment() {
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!

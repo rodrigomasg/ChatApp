@@ -1,4 +1,4 @@
-package com.azteca.chatapp.ui.fragment
+package com.azteca.chatapp.ui.main.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,10 +13,12 @@ import com.azteca.chatapp.data.model.UserModelResponse
 import com.azteca.chatapp.databinding.FragmentSearchBinding
 import com.azteca.chatapp.ui.adapter.SearchAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import dagger.hilt.android.AndroidEntryPoint
 
 
 private const val TAG = "searchFragment"
 
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!

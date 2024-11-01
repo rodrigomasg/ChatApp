@@ -1,4 +1,4 @@
-package com.azteca.chatapp.ui.fragment
+package com.azteca.chatapp.ui.main.fragment
 
 import android.app.Activity
 import android.content.Intent
@@ -18,12 +18,14 @@ import com.azteca.chatapp.common.Service.Companion.refImgProfileUser
 import com.azteca.chatapp.data.model.UserModel
 import com.azteca.chatapp.data.model.UserModelResponse
 import com.azteca.chatapp.databinding.FragmentProfileBinding
-import com.azteca.chatapp.ui.MainActivity
+import com.azteca.chatapp.ui.main.MainActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
 import java.sql.Timestamp
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!

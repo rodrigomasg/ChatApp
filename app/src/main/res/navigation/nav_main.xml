@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/chatsFragment"
-        android:name="com.azteca.chatapp.ui.fragment.ChatsFragment"
+        android:name="com.azteca.chatapp.ui.main.fragment.ChatsFragment"
         android:label="fragment_chats"
         tools:layout="@layout/fragment_chats">
         <action
@@ -22,12 +22,12 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.azteca.chatapp.ui.fragment.ProfileFragment"
+        android:name="com.azteca.chatapp.ui.main.fragment.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile"></fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.azteca.chatapp.ui.fragment.SearchFragment"
+        android:name="com.azteca.chatapp.ui.main.fragment.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search">
         <action
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.azteca.chatapp.ui.fragment.ChatFragment"
+        android:name="com.azteca.chatapp.ui.main.fragment.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat">
         <argument

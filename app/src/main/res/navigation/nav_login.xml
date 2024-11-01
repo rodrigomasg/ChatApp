@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/login1Fragment"
-        android:name="com.azteca.chatapp.ui.fragment.Login1Fragment"
+        android:name="com.azteca.chatapp.ui.login.fragment.Login1Fragment"
         android:label="fragment_login1"
         tools:layout="@layout/fragment_login1">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/login2Fragment"
-        android:name="com.azteca.chatapp.ui.fragment.Login2Fragment"
+        android:name="com.azteca.chatapp.ui.login.fragment.Login2Fragment"
         android:label="fragment_login2"
         tools:layout="@layout/fragment_login2">
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/login3Fragment"
-        android:name="com.azteca.chatapp.ui.fragment.Login3Fragment"
+        android:name="com.azteca.chatapp.ui.login.fragment.Login3Fragment"
         android:label="fragment_login3"
         tools:layout="@layout/fragment_login3">
         <argument

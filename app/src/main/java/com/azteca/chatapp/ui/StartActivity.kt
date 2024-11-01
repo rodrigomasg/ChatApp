@@ -7,9 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.azteca.chatapp.R
 import com.azteca.chatapp.common.SharedPrefs
-import com.azteca.chatapp.ui.MainActivity.Companion.keyNotify
-import com.azteca.chatapp.ui.MainActivity.Companion.userIdNotify
+import com.azteca.chatapp.ui.main.MainActivity.Companion.keyNotify
+import com.azteca.chatapp.ui.main.MainActivity.Companion.userIdNotify
+import com.azteca.chatapp.ui.login.LoginActivity
+import com.azteca.chatapp.ui.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StartActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

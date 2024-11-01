@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.azteca.chatapp.R
-import com.azteca.chatapp.common.Service.Companion.getCurrentUid
 import com.azteca.chatapp.data.model.ChatMsgModelResponse
 import com.azteca.chatapp.databinding.ItemUserMsgBinding
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 
 class ChatAdapter(
+    private val uuid: String,
     options: FirestoreRecyclerOptions<ChatMsgModelResponse>
 ) : FirestoreRecyclerAdapter<ChatMsgModelResponse, ChatAdapter.ViewHolder>(options) {
 
@@ -23,13 +23,13 @@ class ChatAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, model: ChatMsgModelResponse) {
-        holder.bind(model)
+        holder.bind(model, uuid)
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ItemUserMsgBinding.bind(view)
-        fun bind(model: ChatMsgModelResponse) {
-            if (model.senderId == getCurrentUid()) {
+        fun bind(model: ChatMsgModelResponse, uuid: String) {
+            if (model.senderId == uuid) {
                 binding.msgCvRight.isVisible = true
                 binding.msgTvRight.text = model.msg
             } else {

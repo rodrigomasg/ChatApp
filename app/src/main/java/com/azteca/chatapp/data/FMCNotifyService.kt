@@ -1,4 +1,4 @@
-package com.azteca.chatapp.common
+package com.azteca.chatapp.data
 
 import com.google.firebase.messaging.FirebaseMessagingService
 

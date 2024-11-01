@@ -1,4 +1,4 @@
-package com.azteca.chatapp.ui.fragment
+package com.azteca.chatapp.ui.login.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,21 +8,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.azteca.chatapp.R
-import com.azteca.chatapp.common.Service.Companion.getCurrentUid
-import com.azteca.chatapp.common.Service.Companion.setInfUser
 import com.azteca.chatapp.data.model.UserModel
 import com.azteca.chatapp.databinding.FragmentLogin3Binding
-import com.azteca.chatapp.ui.MainActivity
+import com.azteca.chatapp.ui.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.sql.Timestamp
-
 
 private const val TAG = "login3"
 
+@AndroidEntryPoint
 class Login3Fragment : Fragment() {
     private var _binding: FragmentLogin3Binding? = null
     private val binding get() = _binding!!
+    private val viewModel: Login3ViewModel by viewModels()
     private val args: Login3FragmentArgs by navArgs()
     private lateinit var txtNumber: String
 
@@ -43,6 +48,17 @@ class Login3Fragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initListeners()
+        initVm()
+    }
+
+    private fun initVm() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.loading.collect {
+                    binding.login3Pg.isVisible = it
+                }
+            }
+        }
     }
 
     private fun initListeners() {
@@ -55,24 +71,18 @@ class Login3Fragment : Fragment() {
             binding.loginEtNumber.error = getString(R.string.login_username_input)
         } else {
             Log.e(TAG, "se creara")
-            binding.login3Pg.isVisible = true
-            if (!getCurrentUid().isNullOrEmpty()) {
-                val userModel = UserModel(
-                    getCurrentUid(),
-                    txtNumber,
-                    txtUsername.toString(),
-                    Timestamp(System.currentTimeMillis()),
-                    ""
-                )
-                setInfUser(getCurrentUid()!!, userModel).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        binding.login3Pg.isVisible = false
-                        requireActivity().finish()
-                        startActivity(Intent(requireContext(), MainActivity::class.java))
-                    } else {
-                        binding.login3Pg.isVisible = false
-                        Log.e(TAG, it.result.toString())
-                    }
+            val userModel = UserModel(
+                "",
+                txtNumber,
+                txtUsername.toString(),
+                Timestamp(System.currentTimeMillis()),
+                ""
+            )
+            viewModel.validateInfUser(userModel) {
+                Log.e(TAG, it.toString())
+                if (it) {
+                    requireActivity().finish()
+                    startActivity(Intent(requireContext(), MainActivity::class.java))
                 }
             }
         }

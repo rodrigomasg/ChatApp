@@ -1,4 +1,4 @@
-package com.azteca.chatapp.ui.fragment
+package com.azteca.chatapp.ui.login.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,8 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.azteca.chatapp.R
 import com.azteca.chatapp.databinding.FragmentLogin1Binding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class Login1Fragment : Fragment() {
     private var _binding: FragmentLogin1Binding? = null
     private val binding get() = _binding!!

@@ -1,27 +1,25 @@
-package com.azteca.chatapp.ui.fragment
+package com.azteca.chatapp.ui.main.fragment.chats
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.azteca.chatapp.R
-import com.azteca.chatapp.common.Service
-import com.azteca.chatapp.common.Service.Companion.dbTimestamp
-import com.azteca.chatapp.common.Service.Companion.getCurrentUid
 import com.azteca.chatapp.common.SharedPrefs
-import com.azteca.chatapp.data.model.ChatroomModelResponse
 import com.azteca.chatapp.data.model.UserModelResponse
 import com.azteca.chatapp.databinding.FragmentChatsBinding
 import com.azteca.chatapp.ui.adapter.HomeChatAdapter
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.firebase.firestore.Query
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ChatsFragment : Fragment() {
     private var _binding: FragmentChatsBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: ChatsViewModel by viewModels()
     private var adapter: HomeChatAdapter? = null
 
     override fun onCreateView(
@@ -35,7 +33,6 @@ class ChatsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        SharedPrefs(requireContext()).setValueLogin(true)
         initListeners()
         initComponets()
     }
@@ -50,23 +47,21 @@ class ChatsFragment : Fragment() {
     }
 
     private fun initComponets() {
-        if (getCurrentUid() != null) {
-            val query = Service.getChatroomCollections()
-                .whereArrayContains(Service.dbListUser, getCurrentUid()!!)
-                .orderBy(dbTimestamp, Query.Direction.DESCENDING)
-
-            val opts = FirestoreRecyclerOptions
-                .Builder<ChatroomModelResponse>()
-                .setQuery(query, ChatroomModelResponse::class.java)
-                .build()
-            adapter = HomeChatAdapter(opts) { toChat(it) }
-            binding.mainRv.layoutManager = LinearLayoutManager(requireContext())
-            binding.mainRv.adapter = adapter
+        viewModel.getChats { opts ->
+            adapter = HomeChatAdapter(
+                uuid = SharedPrefs(requireContext()).getUuid(),
+                options = opts,
+                viewModel = viewModel,
+                itemListener = { toChat(it) }
+            )
             adapter!!.startListening()
         }
+
+        binding.mainRv.layoutManager = LinearLayoutManager(requireContext())
+        binding.mainRv.adapter = adapter
     }
 
-    fun toChat(it: UserModelResponse) {
+    private fun toChat(it: UserModelResponse) {
         if (it.userId != null) {
             findNavController().navigate(
                 ChatsFragmentDirections.actionChatsFragmentToChatFragment(
